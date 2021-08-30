@@ -16,20 +16,21 @@ export const Colors = {
 const { primary, secondary, tertiary, brand, green, red } = Colors;
 
 export const StyledContainer = styled.View`
-  flex: 1;
-  padding: 25px;
+  padding: 5px;
   align-items: center;
+  align-self: stretch;
+  flex: 1;
   padding-top: ${StatusBarHeight + 10}px;
   background-color: ${primary};
 `;
 
 export const InnerContainer = styled.View`
-  flex: 1;
   width: 100%;
   align-items: center;
   padding: 1px;
+  align-self: stretch;
   padding-top: ${StatusBarHeight + 10}px;
-  background-color: ${primary};
+  background-color: #33ff44;
 `;
 
 export const PageLogo = styled.Image`
