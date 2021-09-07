@@ -4,6 +4,7 @@ import axios from "axios";
 import { Formik } from "formik";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons, Octicons } from "@expo/vector-icons";
+import * as FileSystem from "expo-file-system";
 import {
   StyledContainer,
   InnerContainer,
@@ -20,6 +21,7 @@ import {
 
 const Welcome = ({ navigation, ...data }) => {
   const [hidePassword, setHidePassword] = useState(true);
+
   const handleMedia = async () => {
     if (Platform.OS !== "web") {
       const { status } =
@@ -35,29 +37,35 @@ const Welcome = ({ navigation, ...data }) => {
       videoExportPreset: ImagePicker.VideoExportPreset.LowQuality,
       allowsEditing: false,
     });
-    console.log(result);
+
     const url = "http://192.168.0.183:3000/video/uploadvideo";
+
     if (!result.cancelled) {
       let formdata = new FormData();
       formdata.append("file", { uri: result.uri, type: "video/mov" });
       console.log(formdata);
-      axios({
-        method: "post",
-        url: "http://192.168.0.183:3000/video/uploadvideo",
-        data: formdata,
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      let options = {
+        httpMethod: "PATCH",
+        fieldName: "video",
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        parameters: { email: "mader0708@gmail.come" },
+      };
+      FileSystem.uploadAsync(url, result.uri, options)
         .then((response) => {
+          console.log(response);
           const result = response.data;
-          console.log(response.dat);
           const { message, status } = result;
-
+          console.log("kkkkk");
           if (status == 200) {
             console.log("ok");
+            return;
+          } else {
+            return;
           }
         })
         .catch((err) => {
           console.log(err);
+          return;
         });
     }
   };
@@ -66,7 +74,7 @@ const Welcome = ({ navigation, ...data }) => {
       <InnerContainer>
         <PageLogo
           resizeMode="contain"
-          source={require("./../assets/logo.png")}
+          source={require("./../assets/main_logo.png")}
         />
         <PageTitle>Login Success</PageTitle>
         <StyledButton
@@ -78,6 +86,9 @@ const Welcome = ({ navigation, ...data }) => {
         </StyledButton>
         <StyledButton onPress={handleMedia}>
           <ButtonText>Upload Video</ButtonText>
+        </StyledButton>
+        <StyledButton onPress={() => navigation.navigate("VideoList")}>
+          <ButtonText>Watch Video</ButtonText>
         </StyledButton>
       </InnerContainer>
     </StyledContainer>

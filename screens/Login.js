@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   View,
+  Text,
   ActivityIndicator,
   KeyboardAvoidingView,
 } from "react-native";
@@ -54,6 +55,8 @@ const Login = ({ navigation }) => {
       });
   };
 
+  /*From here*/
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -61,16 +64,12 @@ const Login = ({ navigation }) => {
     >
       <StyledContainer>
         <InnerContainer>
-          <PageLogo
-            resizeMode="contain"
-            source={require("./../assets/logo.png")}
-          />
           <Formik
             initialValues={{ email: "", password: "" }}
             onSubmit={(values, { setSubmitting }) => {
               if (values.email == "" || values.password == "") {
                 //console.log(33);
-                handleMessage("please fill all the fields");
+                handleMessage("아이디 비밀번호를 입력하세요");
                 setSubmitting(false);
               } else {
                 handleLogin(values, setSubmitting);
@@ -86,18 +85,16 @@ const Login = ({ navigation }) => {
             }) => (
               <StyledFormArea>
                 <MyTextInput
-                  lable="Email Address"
                   icon="mail"
-                  placeholder="email address"
+                  placeholder="아이디"
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
                   value={values.email}
                   keyboardType="email-address"
                 />
                 <MyTextInput
-                  lable="Password"
                   icon="mail"
-                  placeholder="*****"
+                  placeholder="비밀번호"
                   placholderTextColor="#F0F0F0"
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
@@ -111,7 +108,7 @@ const Login = ({ navigation }) => {
                 <MsgBox>{message}</MsgBox>
                 {!isSubmitting && (
                   <StyledButton onPress={handleSubmit}>
-                    <ButtonText>login</ButtonText>
+                    <StyledInputLabel>로그인</StyledInputLabel>
                   </StyledButton>
                 )}
                 {isSubmitting && (
@@ -123,26 +120,38 @@ const Login = ({ navigation }) => {
                     <ButtonText>login</ButtonText>
                   </StyledButton>
                 )}
-                <TextLink>
-                  <StyledInputLabel
-                    onPress={() => {
-                      navigation.navigate("Signup");
-                    }}
-                  >
-                    Make an Account!
-                  </StyledInputLabel>
-                </TextLink>
+                <View style={styling.links}>
+                  <TextLink>
+                    <StyledInputLabel
+                      onPress={() => {
+                        navigation.navigate("Signup");
+                      }}
+                    >
+                      회원가입
+                    </StyledInputLabel>
+                  </TextLink>
+                  <TextLink>
+                    <StyledInputLabel>|</StyledInputLabel>
+                  </TextLink>
+                  <TextLink>
+                    <StyledInputLabel
+                      onPress={() => {
+                        navigation.navigate("Signup");
+                      }}
+                    >
+                      비밀번호찾기
+                    </StyledInputLabel>
+                  </TextLink>
+                </View>
               </StyledFormArea>
             )}
           </Formik>
-          <PageTitle>Hi</PageTitle>
         </InnerContainer>
       </StyledContainer>
     </KeyboardAvoidingView>
   );
 };
 const MyTextInput = ({
-  lable,
   icon,
   hidePassword,
   isPassword,
@@ -151,17 +160,7 @@ const MyTextInput = ({
 }) => {
   return (
     <View>
-      <StyledInputLabel>{lable}</StyledInputLabel>
       <StyledTextInput {...props}></StyledTextInput>
-      {isPassword && (
-        <RightIcon onPress={() => setHidePassword(!hidePassword)}>
-          <Ionicons
-            name={hidePassword ? "md-eye-off" : "md-eye"}
-            size={30}
-            color="#33ff33"
-          />
-        </RightIcon>
-      )}
     </View>
   );
 };
@@ -169,6 +168,10 @@ const styling = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
+  },
+  links: {
+    flexDirection: "row",
+    alignSelf: "center",
   },
 });
 export default Login;
